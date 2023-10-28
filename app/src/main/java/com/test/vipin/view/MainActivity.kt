@@ -1,5 +1,6 @@
 package com.test.vipin.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         initView()
         setupUI()
         setupObserver()
+        setUpListener()
 
     }
 
@@ -72,6 +74,12 @@ class MainActivity : AppCompatActivity() {
     private fun renderList(users: List<User>) {
         adapter.addData(users)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun setUpListener(){
+        activityMainBinding.btnMoveToNext.setOnClickListener{
+            startActivity(Intent(this@MainActivity,PhotosActivity::class.java))
+        }
     }
 
 }

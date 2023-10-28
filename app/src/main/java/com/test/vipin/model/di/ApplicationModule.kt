@@ -1,8 +1,11 @@
 package com.test.vipin.model.di
 
+import com.test.vipin.model.RetrofitOne
+import com.test.vipin.model.RetrofitTwo
 import com.test.vipin.model.api.ApiHelper
 import com.test.vipin.model.api.ApiHelperImpl
 import com.test.vipin.model.api.ApiService
+import com.test.vipin.model.api.ApiServicePhotos
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -37,6 +40,7 @@ abstract class ApplicationModule {
 
         @Provides
         @Singleton
+        @RetrofitOne
         fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL: String): Retrofit =
             Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -44,11 +48,26 @@ abstract class ApplicationModule {
                 .client(okHttpClient)
                 .build()
 
+        @Provides
+        @Singleton
+        @RetrofitTwo
+        fun providePhotosRetrofit(okHttpClient: OkHttpClient): Retrofit =
+            Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .client(okHttpClient)
+                .build()
+
 
         @Provides
         @Singleton
-        fun provideApiService(retrofit: Retrofit): ApiService =
+        fun provideApiService(@RetrofitOne retrofit: Retrofit): ApiService =
             retrofit.create(ApiService::class.java)
+
+        @Provides
+        @Singleton
+        fun providePhotosApiService(@RetrofitTwo retrofit: Retrofit): ApiServicePhotos =
+            retrofit.create(ApiServicePhotos::class.java)
     }
 
 //    @Provides

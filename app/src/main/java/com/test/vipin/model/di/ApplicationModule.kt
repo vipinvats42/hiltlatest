@@ -23,7 +23,6 @@ abstract class ApplicationModule {
         fun provideBaseUrl() = "https://5e510330f2c0d300147c034c.mockapi.io"
 
 
-
         @Provides
         @Singleton
         fun provideOkHttpClient() = run {

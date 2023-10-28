@@ -13,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -20,6 +21,8 @@ abstract class ApplicationModule {
     companion object {
         @Provides
         fun provideBaseUrl() = "https://5e510330f2c0d300147c034c.mockapi.io"
+
+
 
         @Provides
         @Singleton

@@ -1,24 +1,27 @@
 package com.test.vipin.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.test.vipin.model.Photos
-import com.test.vipin.model.repository.MainRepository
 import com.test.vipin.model.repository.PhotosRepository
 import com.test.vipin.utils.NetworkHelper
+import com.test.vipin.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Named
+
 
 @HiltViewModel
 class PhotosViewModel @Inject constructor(private val photosRepository: PhotosRepository, private val networkHelper: NetworkHelper) : ViewModel() {
 
-    private val _photosMutableStateFlow = MutableStateFlow<List<Photos>>(listOf())
-    val photosStateFlow : StateFlow<List<Photos>>
+    private val _photosMutableStateFlow : MutableStateFlow<Resource<Photos>?> = MutableStateFlow(null)
+    val photosStateFlow : StateFlow<Resource<Photos>?>
         get() = _photosMutableStateFlow
     init {
         fetchPhotos()
@@ -26,13 +29,21 @@ class PhotosViewModel @Inject constructor(private val photosRepository: PhotosRe
 
     //@Named("activity2")
     private fun fetchPhotos(){
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             if(networkHelper.isNetworkConnected()) {
-                photosRepository.getPhotos().let {
-                    if(it.isSuccessful){
-                        _photosMutableStateFlow.value = it.body()!!
-                    }
+                try {
+                        _photosMutableStateFlow.emit(
+                            Resource.success(
+                                photosRepository.getPhotos()?.body()
+                            )
+                        )
+
+                }catch (e : Exception){
+                    e.printStackTrace()
                 }
+
+
+
             }
         }
     }

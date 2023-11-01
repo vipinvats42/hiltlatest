@@ -10,6 +10,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_move_to_next"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />

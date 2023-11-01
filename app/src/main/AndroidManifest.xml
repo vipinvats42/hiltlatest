@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".view.PhotosActivity"
-            android:launchMode="singleTop"
+            android:launchMode="standard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
